@@ -277,11 +277,11 @@ void *CPLMalloc( size_t nSize )
     if( nSize == 0 )
         return NULL;
 
-    if( nSize < 0 )
+    if( (ssize_t)nSize < 0 )
     {
         CPLError( CE_Failure, CPLE_AppDefined,
-                  "CPLMalloc(%d): Silly size requested.\n",
-                  nSize );
+                  "CPLMalloc(%ld): Silly size requested.\n",
+                  (long)nSize );
         return NULL;
     }
     
@@ -289,8 +289,8 @@ void *CPLMalloc( size_t nSize )
     if( pReturn == NULL )
     {
         CPLError( CE_Fatal, CPLE_OutOfMemory,
-                  "CPLMalloc(): Out of memory allocating %d bytes.\n",
-                  nSize );
+                  "CPLMalloc(): Out of memory allocating %ld bytes.\n",
+                  (long)nSize );
     }
 
     return pReturn;
@@ -331,11 +331,11 @@ void * CPLRealloc( void * pData, size_t nNewSize )
         return NULL;
     }
 
-    if( nNewSize < 0 )
+    if( (ssize_t)nNewSize < 0 )
     {
         CPLError( CE_Failure, CPLE_AppDefined,
-                  "CPLRealloc(%d): Silly size requested.\n",
-                  nNewSize );
+                  "CPLRealloc(%ld): Silly size requested.\n",
+                  (long)nNewSize );
         return NULL;
     }
     
@@ -347,8 +347,8 @@ void * CPLRealloc( void * pData, size_t nNewSize )
     if( pReturn == NULL )
     {
         CPLError( CE_Fatal, CPLE_OutOfMemory,
-                  "CPLRealloc(): Out of memory allocating %d bytes.\n",
-                  nNewSize );
+                  "CPLRealloc(): Out of memory allocating %ld bytes.\n",
+                  (long)nNewSize );
     }
 
     return pReturn;
