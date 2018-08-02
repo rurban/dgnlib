@@ -121,6 +121,7 @@
  */
 
 #include "dgnlibp.h"
+#include <assert.h>
 
 CPL_CVSID("$Id: dgnwrite.cpp,v 1.33 2006/01/25 18:43:19 kintel Exp $");
 
@@ -738,14 +739,12 @@ DGNElemCore *DGNCloneElement( DGNHandle hDGNSrc, DGNHandle hDGNDst,
     }
     else if( psSrcElement->stype == DGNST_KNOT_WEIGHT )
     {
-        DGNElemKnotWeight *psArray, *psSrcArray;
+        DGNElemKnotWeight *psArray;
         int               nSize, numelems;
 
         // FIXME: Is it OK to assume that the # of elements corresponds
         // directly to the element size? kintel 20051218.
         numelems = (psSrcElement->size - 36 - psSrcElement->attr_bytes)/4;
-
-        psSrcArray = (DGNElemKnotWeight *) psSrcElement;
 
         nSize = sizeof(DGNElemKnotWeight) + sizeof(long) * (numelems-1);
 
@@ -2206,12 +2205,14 @@ static void DGNPointToInt( DGNInfo *psDGN, DGNPoint *psPoint,
                            unsigned char *pabyTarget )
 
 {
-    double     adfCT[3];
+    double     adfCT[4];
     int        i;
 
     adfCT[0] = psPoint->x;
     adfCT[1] = psPoint->y;
     adfCT[2] = psPoint->z;
+    adfCT[3] = 0;
+    assert(psDGN->dimension < 3);
 
     for( i = 0; i < psDGN->dimension; i++ )
     {
@@ -2302,7 +2303,6 @@ DGNCreateCellHeaderFromGroup( DGNHandle hDGN, const char *pszName,
 /* -------------------------------------------------------------------- */
 /*      Collect the total size, and bounds.                             */
 /* -------------------------------------------------------------------- */
-    nLevel = papsElems[0]->level;
 
     for( i = 0; i < nNumElems; i++ )
     {

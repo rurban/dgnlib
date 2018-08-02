@@ -102,8 +102,7 @@ void    DGN2IEEEDouble(void * dbl)
 /* -------------------------------------------------------------------- */
 /*      Adjust the exponent so that we may work with it                 */      
 /* -------------------------------------------------------------------- */
-    exponent = dt.hi >> 23;
-    exponent = exponent & 0x000000ff;
+    exponent = (dt.hi >> 23) & 0x000000ff;
 
     if (exponent)
         exponent = exponent -129 + 1023;
